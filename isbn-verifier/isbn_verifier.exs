@@ -16,25 +16,25 @@ defmodule ISBNVerifier do
     numbers =
       isbn
       |> String.to_charlist()
-      |> Enum.filter(&(&1 in 48..57))
-      |> Enum.map(fn c -> c - 48 end)
+      |> Enum.filter(&(&1 in ?0..?9))
+      |> Enum.map(&(&1 - ?0))
 
-    isbn?(numbers, String.ends_with?(isbn, "X"))
+    reversed = Enum.reverse(numbers)
+
+    if String.ends_with?(isbn, "X") do
+      valid?([10 | reversed])
+    else
+      valid?(reversed)
+    end
   end
 
-  defp isbn?(isbn, true) when length(isbn) == 9 do
-    isbn?(isbn ++ [10], true)
+  defp valid?(isbn) when length(isbn) == 10 do
+    isbn
+    |> Enum.with_index(1)
+    |> Enum.map(fn {digit, index} -> digit * index end)
+    |> Enum.sum()
+    |> rem(11) == 0
   end
 
-  defp isbn?(isbn, _) when length(isbn) == 10 do
-    checksum =
-      isbn
-      |> Enum.zip(10..1)
-      |> Enum.map(fn {digit, index} -> digit * index end)
-      |> Enum.sum()
-
-    rem(checksum, 11) == 0
-  end
-
-  defp isbn?(isbn, _), do: false
+  defp valid?(isbn), do: false
 end
