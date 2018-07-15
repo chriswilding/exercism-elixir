@@ -27,11 +27,13 @@ defmodule ISBNVerifier do
   end
 
   defp isbn?(isbn, _) when length(isbn) == 10 do
-    sum =
-      Enum.zip(isbn, 10..1)
-      |> Enum.reduce(0, fn {digit, index}, acc -> acc + digit * index end)
+    checksum =
+      isbn
+      |> Enum.zip(10..1)
+      |> Enum.map(fn {digit, index} -> digit * index end)
+      |> Enum.sum()
 
-    rem(sum, 11) == 0
+    rem(checksum, 11) == 0
   end
 
   defp isbn?(isbn, _), do: false
