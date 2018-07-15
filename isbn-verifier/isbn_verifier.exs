@@ -13,19 +13,21 @@ defmodule ISBNVerifier do
   """
   @spec isbn?(String.t()) :: boolean
   def isbn?(isbn) do
-    numbers =
+    digits =
       isbn
       |> String.to_charlist()
       |> Enum.filter(&(&1 in ?0..?9))
       |> Enum.map(&(&1 - ?0))
+      |> Enum.reverse()
 
-    reversed = Enum.reverse(numbers)
+    with_check_digit =
+      if String.ends_with?(isbn, "X") do
+        [10 | digits]
+      else
+        digits
+      end
 
-    if String.ends_with?(isbn, "X") do
-      valid?([10 | reversed])
-    else
-      valid?(reversed)
-    end
+    valid?(with_check_digit)
   end
 
   defp valid?(isbn) when length(isbn) == 10 do
