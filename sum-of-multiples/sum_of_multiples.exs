@@ -6,11 +6,8 @@ defmodule SumOfMultiples do
   def to(_, []), do: 0
 
   def to(limit, factors) do
-    factors
-    |> Enum.flat_map(fn factor ->
-      Enum.filter(1..(limit - 1), &(rem(&1, factor) === 0))
-    end)
-    |> MapSet.new()
+    1..(limit - 1)
+    |> Enum.filter(fn n -> Enum.any?(factors, &(rem(n, &1) === 0)) end)
     |> Enum.sum()
   end
 end
