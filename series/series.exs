@@ -11,6 +11,6 @@ defmodule StringSeries do
     s
     |> String.graphemes()
     |> Enum.chunk_every(size, 1, :discard)
-    |> Enum.map(&Enum.join/1)
+    |> Enum.map(&to_string/1)
   end
 end
