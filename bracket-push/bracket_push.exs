@@ -1,5 +1,5 @@
 defmodule BracketPush do
-  @map %{"[" => "]", "{" => "}", "(" => ")"}
+  @map %{?[ => ?], ?{ => ?}, ?( => ?)}
   @left Map.keys(@map)
   @right Map.values(@map)
   @brackets @left ++ @right
@@ -9,22 +9,22 @@ defmodule BracketPush do
   """
   @spec check_brackets(String.t()) :: boolean
   def check_brackets(str) do
-    check_brackets(String.graphemes(str), [])
+    check_brackets(str, [])
   end
 
-  defp check_brackets([], []), do: true
-  defp check_brackets([], _), do: false
-  defp check_brackets([head | tail], []) when head in @right, do: false
+  defp check_brackets("", []), do: true
+  defp check_brackets("", _), do: false
+  defp check_brackets(<<head::utf8, tail::binary>>, []) when head in @right, do: false
 
-  defp check_brackets([head | tail], stack) when head not in @brackets do
+  defp check_brackets(<<head::utf8, tail::binary>>, stack) when head not in @brackets do
     check_brackets(tail, stack)
   end
 
-  defp check_brackets([head | tail], stack) when head in @left do
+  defp check_brackets(<<head::utf8, tail::binary>>, stack) when head in @left do
     check_brackets(tail, [head | stack])
   end
 
-  defp check_brackets([head | tail], stack) when head in @right do
+  defp check_brackets(<<head::utf8, tail::binary>>, stack) when head in @right do
     if head === Map.get(@map, hd(stack)) do
       check_brackets(tail, tl(stack))
     else
