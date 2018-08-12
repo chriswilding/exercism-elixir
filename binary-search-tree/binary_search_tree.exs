@@ -44,6 +44,14 @@ defmodule BinarySearchTree do
   def in_order(nil), do: []
 
   def in_order(%{data: data, left: left, right: right}) do
-    in_order(left) ++ [data] ++ in_order(right)
+    in_order(left) ++ [data | in_order(right)]
+  end
+
+  def in_order(%{data: data, left: nil, right: right}) do
+    [data | in_order(right)]
+  end
+
+  def in_order(%{data: data, left: left, right: nil}) do
+    in_order(left) ++ [data]
   end
 end
