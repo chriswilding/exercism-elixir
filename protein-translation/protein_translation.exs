@@ -1,22 +1,22 @@
 defmodule ProteinTranslation do
   @codon_to_amino_acid %{
-    "UGU" => {:ok, "Cysteine"},
-    "UGC" => {:ok, "Cysteine"},
-    "UUA" => {:ok, "Leucine"},
-    "UUG" => {:ok, "Leucine"},
-    "AUG" => {:ok, "Methionine"},
-    "UUU" => {:ok, "Phenylalanine"},
-    "UUC" => {:ok, "Phenylalanine"},
-    "UCU" => {:ok, "Serine"},
-    "UCC" => {:ok, "Serine"},
-    "UCA" => {:ok, "Serine"},
-    "UCG" => {:ok, "Serine"},
-    "UGG" => {:ok, "Tryptophan"},
-    "UAU" => {:ok, "Tyrosine"},
-    "UAC" => {:ok, "Tyrosine"},
-    "UAA" => {:ok, "STOP"},
-    "UAG" => {:ok, "STOP"},
-    "UGA" => {:ok, "STOP"}
+    "UGU" => "Cysteine",
+    "UGC" => "Cysteine",
+    "UUA" => "Leucine",
+    "UUG" => "Leucine",
+    "AUG" => "Methionine",
+    "UUU" => "Phenylalanine",
+    "UUC" => "Phenylalanine",
+    "UCU" => "Serine",
+    "UCC" => "Serine",
+    "UCA" => "Serine",
+    "UCG" => "Serine",
+    "UGG" => "Tryptophan",
+    "UAU" => "Tyrosine",
+    "UAC" => "Tyrosine",
+    "UAA" => "STOP",
+    "UAG" => "STOP",
+    "UGA" => "STOP"
   }
 
   @doc """
@@ -51,7 +51,9 @@ defmodule ProteinTranslation do
   """
   @spec of_codon(String.t()) :: {atom, String.t()}
   def of_codon(codon) do
-    error = {:error, "invalid codon"}
-    Map.get(@codon_to_amino_acid, codon, error)
+    case Map.fetch(@codon_to_amino_acid, codon) do
+      :error -> {:error, "invalid codon"}
+      value -> value
+    end
   end
 end
