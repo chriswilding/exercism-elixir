@@ -8,7 +8,9 @@ defmodule ArmstrongNumber do
     number_of_digits = trunc(:math.floor(:math.log10(number) + 1))
 
     digits(number, number_of_digits)
-    |> Enum.reduce(0, &(&2 + trunc(:math.pow(&1, number_of_digits)))) === number
+    |> Enum.map(&:math.pow(&1, number_of_digits))
+    |> Enum.sum()
+    |> trunc === number
   end
 
   @spec digits(integer, integer) :: [integer]
@@ -19,6 +21,6 @@ defmodule ArmstrongNumber do
 
   @spec nth_digit(integer, integer) :: integer
   defp nth_digit(number, n) do
-    trunc(rem(number, trunc(:math.pow(10, n))) / trunc(:math.pow(10, n - 1)))
+    div(rem(number, trunc(:math.pow(10, n))), trunc(:math.pow(10, n - 1)))
   end
 end
