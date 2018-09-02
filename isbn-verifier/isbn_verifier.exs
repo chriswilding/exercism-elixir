@@ -33,5 +33,5 @@ defmodule ISBNVerifier do
     |> rem(11) == 0
   end
 
-  defp valid?(isbn), do: false
+  defp valid?(_), do: false
 end
