@@ -24,9 +24,10 @@ defmodule BracketPush do
     check_brackets(tail, [head | stack])
   end
 
-  defp check_brackets(<<head::utf8, tail::binary>>, stack) when head in @right do
-    if head === Map.get(@map, hd(stack)) do
-      check_brackets(tail, tl(stack))
+  defp check_brackets(<<head::utf8, tail::binary>>, [stack_head | stack_tail])
+       when head in @right do
+    if head === Map.get(@map, stack_head) do
+      check_brackets(tail, stack_tail)
     else
       false
     end
