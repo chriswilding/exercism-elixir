@@ -35,8 +35,8 @@ defmodule ProteinTranslation do
 
         case {old_status, new_status, output} do
           {_, :ok, amino_acid} -> {:ok, [amino_acid | acc]}
-          {:error, _, acc} -> {:error, nil}
-          {_, :error, acc} -> {:error, nil}
+          {:error, _, _} -> {:error, nil}
+          {_, :error, _} -> {:error, nil}
         end
       end)
 
